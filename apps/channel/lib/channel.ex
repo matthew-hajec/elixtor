@@ -2,11 +2,15 @@ defmodule Channel do
   @moduledoc """
   The Channel module handles the communication between nodes in a network.
 
-  It provides functions to send and receive cells over a secure SSL socket. You can read more about Channels in the Tor spec: https://spec.torproject.org/tor-spec/channels.html
+  It provides functions to send and receive cells over a secure SSL socket, and other functions related to establishing and using a channel.
+
+  As of now, link protocols other than version 3 are not explicitly supported.
+
+  You can read more about Channels in the Tor spec: https://spec.torproject.org/tor-spec/channels.html
   """
 
   @typedoc """
-  A channel is a TLS connection to a Tor relay.
+  A channel is a TLS connection to a Tor relay, the width of the cird_id is negotiated during the handshake.
   """
   @type t :: %__MODULE__{
           tls_socket: :ssl.socket(),

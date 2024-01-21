@@ -3,6 +3,17 @@ defmodule Channel.Parsing.Certs do
   The Channel.Parsing.Certs module provides functions for parsing Tor CERTS cells.
   """
 
+  @type t :: %__MODULE__{
+          version: integer(),
+          cert_type: integer(),
+          expiration_date: integer(),
+          cert_key_type: integer(),
+          certified_key: binary,
+          extensions: [%{}],
+          signature: binary,
+          pre_sig: binary
+        }
+
   defstruct [
     :version,
     :cert_type,
@@ -14,6 +25,11 @@ defmodule Channel.Parsing.Certs do
     :pre_sig
   ]
 
+  @doc """
+  Parses a Tor CERTS cell and returns a list of parsed certificates.
+  """
+  @spec parse_certs(nonempty_binary() | Channel.Cell.t()) ::
+          {:error, :invalid_format} | {:ok, [Channel.Parsing.Certs.t()]}
   def parse_certs(%Channel.Cell{payload: payload}) do
     parse_certs(payload)
   end

@@ -3,6 +3,10 @@ defmodule Channel.Parsing.Certs.Ed25519 do
   The Channel.Parsing.Certs.Ed25519 module provides functions for parsing Ed25519 certs from a CERTS cell.
   """
 
+  @doc """
+  Parses an Ed25519 cert from a CERTS cell.
+  """
+  @spec parse(<<_::64, _::_*8>>) :: {:error, :invalid_format} | {:ok, Channel.Parsing.Certs.t()}
   def parse(<<version::8, cert_type::8, expiration_date::32, cert_key_type::8, certified_key::binary-size(32), num_extensions::8, rest::binary>> = full_cert) do
     case parse_extensions(num_extensions, rest, []) do
       {:ok, extensions, <<signature::binary-size(64)>>} ->
