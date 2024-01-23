@@ -6,5 +6,14 @@ defmodule Channel.CellBehaviour do
   """
 
   @callback from_binary_cell(Channel.BinaryCell.t()) :: {:ok, any()} | {:error, any()}
+
+  @doc """
+  Construct a cell of the given type given a keyword list of options.
+  """
+  @callback from_keywords(keyword()) :: {:ok, any()} | {:error, any()}
+
+  @doc """
+  Convert a cell of the given type to a binary cell.
+  """
   @callback to_binary_cell(any()) :: {:ok, Channel.BinaryCell.t()} | {:error, any()}
 end

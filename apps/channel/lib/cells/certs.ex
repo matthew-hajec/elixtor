@@ -84,7 +84,11 @@ defmodule Channel.Cells.Certs do
 
   defp parse_ed25519_extensions(_, _, _), do: {:error, :invalid_format}
 
+  def from_keywords(_keyword) do
+    {:error, :not_implemented}
+  end
+
   def to_binary_cell(_any) do
-    {:ok, Channel.BinaryCell.new(0, 7, <<3::16>>)}
+    {:error, :not_implemented}
   end
 end
