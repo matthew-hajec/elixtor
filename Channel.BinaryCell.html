@@ -8,13 +8,13 @@
     <meta name="project" content="elixtor v0.1.0-beta">
 
 
-    <title>Channel.Cell — elixtor v0.1.0-beta</title>
+    <title>Channel.BinaryCell — elixtor v0.1.0-beta</title>
     <link rel="stylesheet" href="dist/html-elixir-FM2CSD74.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-43PMFBC7.js"></script>
-    <script src="dist/sidebar_items-E50E2BAE.js"></script>
+    <script src="dist/sidebar_items-A31B8B97.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -117,14 +117,14 @@ Pages
 
 <h1>
 
-  <span translate="no">Channel.Cell</span> 
+  <span translate="no">Channel.BinaryCell</span> 
   <small class="app-vsn" translate="no">(elixtor v0.1.0-beta)</small>
 
 </h1>
 
 
   <section id="moduledoc">
-<p>The Channel.Cell module represents the basic unit of communication in the Tor protocol.</p><p>Each cell consists of a circuit ID, a command, and a payload. The circuit ID identifies the circuit that the cell belongs to. The command indicates the type of the cell. The payload contains the actual data of the cell.</p><p>Cells can be variable or fixed length, it is up to the sender to parse the type of cell correctly. The function <a href="#variable_payload?/1"><code class="inline">variable_payload?/1</code></a> can be used to determine if a cell has a fixed or variable length payload.
+<p>The Channel.BinaryCell module represents the basic unit of communication in the Tor protocol.</p><p>Each cell consists of a circuit ID, a command, and a payload. The circuit ID identifies the circuit that the cell belongs to. The command indicates the type of the cell. The payload contains the actual data of the cell.</p><p>Cells can be variable or fixed length, it is up to the sender to parse the type of cell correctly. The function <a href="#variable_payload?/1"><code class="inline">variable_payload?/1</code></a> can be used to determine if a cell has a fixed or variable length payload.
 The circ_id can be either 16 or 32 bits long, this depends on the negotiated link protocol version, and the sender must know which to use.</p><p>See <a href="https://spec.torproject.org/tor-spec/cell-packet-format.html">https://spec.torproject.org/tor-spec/cell-packet-format.html</a> for more details about the cell packet format in the Tor protocol.</p>
   </section>
 
@@ -206,7 +206,11 @@ The circ_id can be either 16 or 32 bits long, this depends on the negotiated lin
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@type</span> t() :: %Channel.Cell{circ_id: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(), command: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(), payload: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()}</pre>
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Channel.BinaryCell{
+  circ_id: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(),
+  command: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(),
+  payload: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()
+}</pre>
 
       </div>
 
@@ -246,14 +250,14 @@ The circ_id can be either 16 or 32 bits long, this depends on the negotiated lin
       </div>
 
 <p>Creates a cell</p><p>Examples:
-  iex&gt; Channel.Cell.new(1, 7, &lt;&lt;1::16,2::16,3::16&gt;&gt;)
-  %Channel.Cell{</p><pre><code class="makeup elixir" translate="no"><span class="ss">circ_id</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  iex&gt; Channel.BinaryCell.new(1, 7, &lt;&lt;1::16,2::16,3::16&gt;&gt;)
+  %Channel.BinaryCell{</p><pre><code class="makeup elixir" translate="no"><span class="ss">circ_id</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
 </span><span class="ss">command</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
-</span><span class="ss">payload</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0082002375-1">&lt;&lt;</span><span class="mi">1</span><span class="o">::</span><span class="mi">16</span><span class="p">,</span><span class="mi">2</span><span class="o">::</span><span class="mi">16</span><span class="p">,</span><span class="mi">3</span><span class="o">::</span><span class="mi">16</span><span class="p" data-group-id="0082002375-1">&gt;&gt;</span></code></pre><p>  }
-  iex&gt; Channel.Cell.new(1, 1, &lt;&lt;1::16,2::16,3::16&gt;&gt;)
-  %Channel.Cell{</p><pre><code class="makeup elixir" translate="no"><span class="ss">circ_id</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+</span><span class="ss">payload</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0912790581-1">&lt;&lt;</span><span class="mi">1</span><span class="o">::</span><span class="mi">16</span><span class="p">,</span><span class="mi">2</span><span class="o">::</span><span class="mi">16</span><span class="p">,</span><span class="mi">3</span><span class="o">::</span><span class="mi">16</span><span class="p" data-group-id="0912790581-1">&gt;&gt;</span></code></pre><p>  }
+  iex&gt; Channel.BinaryCell.new(1, 1, &lt;&lt;1::16,2::16,3::16&gt;&gt;)
+  %Channel.BinaryCell{</p><pre><code class="makeup elixir" translate="no"><span class="ss">circ_id</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
 </span><span class="ss">command</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-</span><span class="ss">payload</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="5312121147-1">&lt;&lt;</span><span class="mi">1</span><span class="o">::</span><span class="mi">16</span><span class="p">,</span><span class="mi">2</span><span class="o">::</span><span class="mi">16</span><span class="p">,</span><span class="mi">3</span><span class="o">::</span><span class="mi">16</span><span class="p" data-group-id="5312121147-1">&gt;&gt;</span></code></pre><p>  }</p>
+</span><span class="ss">payload</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7703298360-1">&lt;&lt;</span><span class="mi">1</span><span class="o">::</span><span class="mi">16</span><span class="p">,</span><span class="mi">2</span><span class="o">::</span><span class="mi">16</span><span class="p">,</span><span class="mi">3</span><span class="o">::</span><span class="mi">16</span><span class="p" data-group-id="7703298360-1">&gt;&gt;</span></code></pre><p>  }</p>
   </section>
 </section>
 <section class="detail" id="variable_payload?/1">
@@ -277,11 +281,11 @@ The circ_id can be either 16 or 32 bits long, this depends on the negotiated lin
       </div>
 
 <p>Determines if a cell has a variable length payload based on the command.</p><p>Examples:
-  iex&gt; Channel.Cell.variable_payload?(7)
+  iex&gt; Channel.BinaryCell.variable_payload?(7)
   true
-  iex&gt; Channel.Cell.variable_payload?(128)
+  iex&gt; Channel.BinaryCell.variable_payload?(128)
   true
-  iex&gt; Channel.Cell.variable_payload?(127)
+  iex&gt; Channel.BinaryCell.variable_payload?(127)
   false</p>
   </section>
 </section>
