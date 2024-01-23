@@ -8,13 +8,13 @@
     <meta name="project" content="elixtor v0.1.0-beta">
 
 
-    <title>Channel.Parsing.Certs — elixtor v0.1.0-beta</title>
+    <title>Channel.Cells.Certs — elixtor v0.1.0-beta</title>
     <link rel="stylesheet" href="dist/html-elixir-FM2CSD74.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-43PMFBC7.js"></script>
-    <script src="dist/sidebar_items-A31B8B97.js"></script>
+    <script src="dist/sidebar_items-C5A58241.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -117,14 +117,14 @@ Pages
 
 <h1>
 
-  <span translate="no">Channel.Parsing.Certs</span> 
+  <span translate="no">Channel.Cells.Certs</span> 
   <small class="app-vsn" translate="no">(elixtor v0.1.0-beta)</small>
 
 </h1>
 
 
   <section id="moduledoc">
-<p>The Channel.Parsing.Certs module provides functions for parsing Tor CERTS cells.</p>
+<p>The Channel.Cells.Certs module represents the CERTS cell type in the Tor protocol.</p><p>Currently, only Ed25519 certs are properly parsed, all other cert types are returned as binaries.</p>
   </section>
 
 
@@ -156,11 +156,21 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#parse_certs/1" translate="no">parse_certs(arg1)</a>
+        <a href="#from_binary_cell/1" translate="no">from_binary_cell(cell)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Parses a Tor CERTS cell and returns a list of parsed certificates.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Channel.CellBehaviour.html#c:from_binary_cell/1"><code class="inline">Channel.CellBehaviour.from_binary_cell/1</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#to_binary_cell/1" translate="no">to_binary_cell(any)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Channel.CellBehaviour.html#c:to_binary_cell/1"><code class="inline">Channel.CellBehaviour.to_binary_cell/1</code></a>.</p></div>
 
     </div>
 
@@ -193,7 +203,7 @@ Pages
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@type</span> t() :: %Channel.Parsing.Certs{
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Channel.Cells.Certs{
   cert_key_type: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(),
   cert_type: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(),
   certified_key: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(),
@@ -221,28 +231,38 @@ Pages
       <span class="text">Functions</span>
     </h1>
     <div class="functions-list">
-<section class="detail" id="parse_certs/1">
+<section class="detail" id="from_binary_cell/1">
 
   <div class="detail-header">
-    <a href="#parse_certs/1" class="detail-link" title="Link to this function">
+    <a href="#from_binary_cell/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
       <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">parse_certs(arg1)</h1>
+    <h1 class="signature" translate="no">from_binary_cell(cell)</h1>
 
 
   </div>
 
   <section class="docstring">
 
-      <div class="specs">
+<p>Callback implementation for <a href="Channel.CellBehaviour.html#c:from_binary_cell/1"><code class="inline">Channel.CellBehaviour.from_binary_cell/1</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="to_binary_cell/1">
 
-          <pre translate="no"><span class="attribute">@spec</span> parse_certs(nonempty_binary() | <a href="Channel.BinaryCell.html#t:t/0">Channel.BinaryCell.t</a>()) ::
-  {:error, :invalid_format} | {:ok, [<a href="#t:t/0">t</a>()]}</pre>
+  <div class="detail-header">
+    <a href="#to_binary_cell/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">to_binary_cell(any)</h1>
 
-      </div>
 
-<p>Parses a Tor CERTS cell and returns a list of parsed certificates.</p>
+  </div>
+
+  <section class="docstring">
+
+<p>Callback implementation for <a href="Channel.CellBehaviour.html#c:to_binary_cell/1"><code class="inline">Channel.CellBehaviour.to_binary_cell/1</code></a>.</p>
   </section>
 </section>
 
