@@ -28,9 +28,9 @@ defmodule Channel.Parsing.Certs do
   @doc """
   Parses a Tor CERTS cell and returns a list of parsed certificates.
   """
-  @spec parse_certs(nonempty_binary() | Channel.Cell.t()) ::
+  @spec parse_certs(nonempty_binary() | Channel.BinaryCell.t()) ::
           {:error, :invalid_format} | {:ok, [Channel.Parsing.Certs.t()]}
-  def parse_certs(%Channel.Cell{payload: payload}) do
+  def parse_certs(%Channel.BinaryCell{payload: payload}) do
     parse_certs(payload)
   end
 

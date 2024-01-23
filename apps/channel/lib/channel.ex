@@ -39,7 +39,7 @@ defmodule Channel do
   """
   @spec client_handshake(Channel.t()) :: :ok | {:error, any()}
   def client_handshake(%{tls_socket: tls_socket} = channel) do
-    with :ok <- send_cell(channel, Channel.Cell.new(0, 7, <<3::16>>)), # VERSIONS
+    with :ok <- send_cell(channel, Channel.BinaryCell.new(0, 7, <<3::16>>)), # VERSIONS
          {:ok, _} <- recv_cell(channel), # VERSIONS
          {:ok, cell} <- recv_cell(channel), # CERTS
          {:ok, certs} <- Channel.Parsing.Certs.parse_certs(cell),
@@ -53,7 +53,7 @@ defmodule Channel do
         4 -> 4
         _ -> 6
       end
-      cell = Channel.Cell.new(0, 8, <<0::32, addr_type, byte_size(addr_bin), addr_bin::binary, 1, 4, 4, 0, 0, 0, 0>>)
+      cell = Channel.BinaryCell.new(0, 8, <<0::32, addr_type, byte_size(addr_bin), addr_bin::binary, 1, 4, 4, 0, 0, 0, 0>>)
       send_cell(channel, cell) # NETINFO
     else
       {:error, error} -> {:error, error}
@@ -90,10 +90,10 @@ defmodule Channel do
   @doc """
   Sends the given cell over the given channel.
   """
-  @spec send_cell(Channel.t(), Channel.Cell.t()) :: :ok | {:error, :ssl.reason()}
+  @spec send_cell(Channel.t(), Channel.BinaryCell.t()) :: :ok | {:error, :ssl.reason()}
   def send_cell(channel, cell) do
     cell_bytes =
-      if Channel.Cell.variable_payload?(cell.command) do
+      if Channel.BinaryCell.variable_payload?(cell.command) do
         # Include the length of the payload in the cell
         <<cell.circ_id::size(channel.circ_id_len), cell.command::8, byte_size(cell.payload)::16,
           cell.payload::binary>>
@@ -109,18 +109,18 @@ defmodule Channel do
   @doc """
   Receives the next cell from the given channel in the order they were received.
   """
-  @spec recv_cell(Channel.t()) :: {:ok, Channel.Cell.t()} | {:error, :ssl.reason()}
+  @spec recv_cell(Channel.t()) :: {:ok, Channel.BinaryCell.t()} | {:error, :ssl.reason()}
   def recv_cell(channel) do
     with {:ok, {circ_id, cmd, payload_type}} <- recv_cell_header(channel),
          {:ok, payload} <- recv_cell_payload(channel, payload_type) do
-      {:ok, Channel.Cell.new(circ_id, cmd, payload)}
+      {:ok, Channel.BinaryCell.new(circ_id, cmd, payload)}
     end
   end
 
   defp recv_cell_header(channel) do
     case :ssl.recv(channel.tls_socket, trunc(channel.circ_id_len / 8) + 1) do
       {:ok, <<circ_id::size(channel.circ_id_len), cmd::8>>} ->
-        if Channel.Cell.variable_payload?(cmd) do
+        if Channel.BinaryCell.variable_payload?(cmd) do
           {:ok, {circ_id, cmd, :variable}}
         else
           {:ok, {circ_id, cmd, :fixed}}

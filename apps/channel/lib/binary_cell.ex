@@ -1,6 +1,6 @@
-defmodule Channel.Cell do
+defmodule Channel.BinaryCell do
   @moduledoc """
-  The Channel.Cell module represents the basic unit of communication in the Tor protocol.
+  The Channel.BinaryCell module represents the basic unit of communication in the Tor protocol.
 
   Each cell consists of a circuit ID, a command, and a payload. The circuit ID identifies the circuit that the cell belongs to. The command indicates the type of the cell. The payload contains the actual data of the cell.
 
@@ -29,27 +29,27 @@ defmodule Channel.Cell do
   Creates a cell
 
   Examples:
-    iex> Channel.Cell.new(1, 7, <<1::16,2::16,3::16>>)
-    %Channel.Cell{
+    iex> Channel.BinaryCell.new(1, 7, <<1::16,2::16,3::16>>)
+    %Channel.BinaryCell{
       circ_id: 1,
       command: 7,
       payload: <<1::16,2::16,3::16>>
     }
-    iex> Channel.Cell.new(1, 1, <<1::16,2::16,3::16>>)
-    %Channel.Cell{
+    iex> Channel.BinaryCell.new(1, 1, <<1::16,2::16,3::16>>)
+    %Channel.BinaryCell{
       circ_id: 1,
       command: 1,
       payload: <<1::16,2::16,3::16>>
     }
   """
-  @spec new(integer(), integer(), binary()) :: Channel.Cell.t()
+  @spec new(integer(), integer(), binary()) :: Channel.BinaryCell.t()
   def new(circ_id, command, payload) do
     # If the payload is fixed, make sure it's 509 bytes long (pad with null bytes, reject if too long)
     if !variable_payload?(command) && byte_size(payload) > 509 do
       raise "Fixed length payloads must be 509 bytes or less."
     end
 
-    %Channel.Cell{
+    %Channel.BinaryCell{
       circ_id: circ_id,
       command: command,
       payload: payload
@@ -60,11 +60,11 @@ defmodule Channel.Cell do
   Determines if a cell has a variable length payload based on the command.
 
   Examples:
-    iex> Channel.Cell.variable_payload?(7)
+    iex> Channel.BinaryCell.variable_payload?(7)
     true
-    iex> Channel.Cell.variable_payload?(128)
+    iex> Channel.BinaryCell.variable_payload?(128)
     true
-    iex> Channel.Cell.variable_payload?(127)
+    iex> Channel.BinaryCell.variable_payload?(127)
     false
 
   """
