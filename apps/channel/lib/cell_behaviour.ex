@@ -1,8 +1,10 @@
 defmodule Channel.CellBehaviour do
   @moduledoc """
-  Defines behaviour for converting between binary cells and specific cell types.
+  Defines behaviour for converting between binary cells and specific cell types. Cells are differentiated
+  by their command code.
 
-  The `any()` type is used liberally in the callbacks to allow for flexibility in the implementation.
+  Tor provides a list of cell types with hyperlinks to the relevant sections of the Tor specification
+  in section 2.3.2 "Cells (messages and channels)".
   """
 
   @callback from_binary_cell(Channel.BinaryCell.t()) :: {:ok, struct()} | {:error, any()}

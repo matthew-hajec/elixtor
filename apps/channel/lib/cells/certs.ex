@@ -29,17 +29,13 @@ defmodule Channel.Cells.Certs do
     :pre_sig
   ]
 
-  def from_binary_cell(cell) do
-    parse_certs(cell.payload)
-  end
+  def from_binary_cell(cell), do: parse_certs(cell.payload)
 
-  defp parse_certs(<<num_certs::8, rest::binary>>) do
-    parse_certs(num_certs, rest, [])
-  end
+  # Read the number of certs in the cell
+  defp parse_certs(<<num_certs::8, rest::binary>>), do: parse_certs(num_certs, rest, [])
+  defp parse_certs(_), do: {:error, :invalid_format}
 
-  defp parse_certs(0, _rest, acc), do: {:ok, Enum.reverse(acc)}
-
-  # Handle Ed25519 certs
+  # Parse an Ed25519 cert
   defp parse_certs(
          num_certs,
          <<cert_type::8, cert_len::16, cert::binary-size(cert_len), rest::binary>>,
@@ -47,12 +43,13 @@ defmodule Channel.Cells.Certs do
        )
        when cert_type in [4, 5, 6, 8, 9, 10, 11] do
     case parse_ed25519(cert) do
+      # Parse the next cert
       {:ok, parsed_cert} -> parse_certs(num_certs - 1, rest, [{cert_type, parsed_cert} | acc])
       {:error, _} = error -> error
     end
   end
 
-  # Handle other certs
+  # Non-Ed25519 certs
   defp parse_certs(
          num_certs,
          <<cert_type::8, cert_len::16, cert::binary-size(cert_len), rest::binary>>,
@@ -61,37 +58,36 @@ defmodule Channel.Cells.Certs do
     parse_certs(num_certs - 1, rest, [{cert_type, cert} | acc])
   end
 
+  # Once we've parsed all the certs, return them
+  defp parse_certs(0, _rest, acc), do: {:ok, Enum.reverse(acc)}
   defp parse_certs(_, _, _), do: {:error, :invalid_format}
 
   defp parse_ed25519(
          <<version::8, cert_type::8, expiration_date::32, cert_key_type::8,
            certified_key::binary-size(32), num_extensions::8, rest::binary>> = full_cert
        ) do
-    case parse_ed25519_extensions(num_extensions, rest, []) do
-      {:ok, extensions, <<signature::binary-size(64)>>} ->
-        # Calculate the length of the bytes prior to the signature
-        pre_sig_len = byte_size(full_cert) - 64
-        # Extract the bytes prior to the signature
-        <<pre_sig::binary-size(pre_sig_len), _::binary>> = full_cert
-
-        {:ok,
-         %Channel.Cells.Certs{
-           version: version,
-           cert_type: cert_type,
-           expiration_date: expiration_date,
-           cert_key_type: cert_key_type,
-           certified_key: certified_key,
-           extensions: extensions,
-           signature: signature,
-           pre_sig: pre_sig
-         }}
-
-      _ ->
-        {:error, :invalid_format}
+    with {:ok, extensions, <<signature::binary-size(64)>>} <-
+           parse_ed25519_extensions(num_extensions, rest),
+         pre_sig_len <- byte_size(full_cert) - 64,
+         <<pre_sig::binary-size(pre_sig_len), _::binary>> <- full_cert do
+      {:ok,
+       %Channel.Cells.Certs{
+         version: version,
+         cert_type: cert_type,
+         expiration_date: expiration_date,
+         cert_key_type: cert_key_type,
+         certified_key: certified_key,
+         extensions: extensions,
+         signature: signature,
+         pre_sig: pre_sig
+       }}
+    else
+      _ -> {:error, :invalid_format}
     end
   end
 
-  defp parse_ed25519_extensions(0, rest, acc), do: {:ok, Enum.reverse(acc), rest}
+  defp parse_ed25519_extensions(num_extensions, binary),
+    do: parse_ed25519_extensions(num_extensions, binary, [])
 
   defp parse_ed25519_extensions(
          num_extensions,
@@ -102,6 +98,8 @@ defmodule Channel.Cells.Certs do
       %{ext_type: ext_type, ext_flags: ext_flags, ext_data: ext_data} | acc
     ])
   end
+
+  defp parse_ed25519_extensions(0, rest, acc), do: {:ok, Enum.reverse(acc), rest}
 
   defp parse_ed25519_extensions(_, _, _), do: {:error, :invalid_format}
 

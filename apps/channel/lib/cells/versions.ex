@@ -14,38 +14,35 @@ defmodule Channel.Cells.Versions do
   ]
 
   def from_binary_cell(cell) do
-    # Parse the available versions
     case parse_versions(cell.payload) do
       {:ok, versions} -> {:ok, %__MODULE__{versions: versions}}
       {:error, _} = error -> error
     end
   end
 
-  # Versions is a series of 2-byte big-endian integers with no terminator.
-  defp parse_versions(<<version::16, rest::binary>>) do
-    parse_versions(rest, [version])
-  end
+  # A VERSIONS cell contains a list of link protocol versions. Each version is 16 bits long.
+  defp parse_versions(binary), do: parse_versions(binary, [])
 
-  defp parse_versions(<<version::16, rest::binary>>, acc) do
-    parse_versions(rest, [version | acc])
-  end
+  defp parse_versions(<<version::16, rest::binary>>, acc),
+    do: parse_versions(rest, [version | acc])
 
-  defp parse_versions(<<>>, acc) do
-    {:ok, Enum.reverse(acc)}
-  end
+  # Rest is empty, so we're done
+  defp parse_versions(<<>>, acc), do: {:ok, Enum.reverse(acc)}
 
+  # Error if previous pattern matching fails
   defp parse_versions(_, _), do: {:error, :invalid_format}
 
   def from_keywords(keywords) do
     versions = keywords[:versions]
 
-    # Make sure the versions are valid (1-5)
-    if Enum.any?(versions, fn version -> version < 1 or version > 5 end) do
+    if Enum.all?(versions, &valid_version?/1) do
+      {:ok, %__MODULE__{versions: versions}}
+    else
       {:error, :invalid_version}
     end
-
-    {:ok, %__MODULE__{versions: versions}}
   end
+
+  defp valid_version?(version), do: version >= 1 and version <= 5
 
   def to_binary_cell(versions_cell) do
     # Convert the versions to a binary
