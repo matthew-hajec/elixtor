@@ -83,7 +83,8 @@ defmodule Channel do
           {:error, :cert_mismatch}
         end
 
-      {:error, _} = error -> error
+      {:error, _} = error ->
+        error
     end
   end
 
