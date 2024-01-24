@@ -2,6 +2,7 @@
 Channel.BinaryCell.html
 Channel.CellBehaviour.html
 Channel.Cells.Certs.html
+Channel.Cells.Versions.html
 Channel.html
 api-reference.html
 dist/handlebars.runtime-NWIB6V2M.js
@@ -31,7 +32,7 @@ dist/merriweather-latin-ext-300-normal-K6L27CZ5.woff2
 dist/merriweather-vietnamese-300-italic-EHHNZPUO.woff2
 dist/merriweather-vietnamese-300-normal-U376L4Z4.woff2
 dist/remixicon-NKANDIL5.woff2
-dist/search_data-A4C98974.js
-dist/sidebar_items-16CECCA8.js
+dist/search_data-CF27C2DC.js
+dist/sidebar_items-2FE70329.js
 index.html
 search.html

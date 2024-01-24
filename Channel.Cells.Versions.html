@@ -8,7 +8,7 @@
     <meta name="project" content="elixtor v0.1.0-beta">
 
 
-    <title>Channel.CellBehaviour — elixtor v0.1.0-beta</title>
+    <title>Channel.Cells.Versions — elixtor v0.1.0-beta</title>
     <link rel="stylesheet" href="dist/html-elixir-FM2CSD74.css" />
 
 
@@ -22,7 +22,7 @@
 
 
   </head>
-  <body data-type="modules" class="page-behaviour">
+  <body data-type="modules" class="page-module">
     <script>
 
       try {
@@ -117,14 +117,14 @@ Pages
 
 <h1>
 
-  <span translate="no">Channel.CellBehaviour</span> <small>behaviour</small>
+  <span translate="no">Channel.Cells.Versions</span> 
   <small class="app-vsn" translate="no">(elixtor v0.1.0-beta)</small>
 
 </h1>
 
 
   <section id="moduledoc">
-<p>Defines behaviour for converting between binary cells and specific cell types.</p><p>The <code class="inline">any()</code> type is used liberally in the callbacks to allow for flexibility in the implementation.</p>
+<p>The Channel.Cells.Versions module represents the VERSIONS cell type in the Tor protocol.</p>
   </section>
 
 
@@ -135,36 +135,52 @@ Pages
       </a>
       <span class="text">Summary</span>
     </h1>
-<div class="summary-callbacks summary">
+<div class="summary-types summary">
   <h2>
-    <a href="#callbacks">Callbacks</a>
+    <a href="#types">Types</a>
   </h2>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:from_binary_cell/1" translate="no">from_binary_cell(t)</a>
+        <a href="#t:t/0" translate="no">t()</a>
 
       </div>
 
     </div>
 
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:from_keywords/1" translate="no">from_keywords(keyword)</a>
+        <a href="#from_binary_cell/1" translate="no">from_binary_cell(cell)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Construct a cell of the given type given a keyword list of options.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Channel.CellBehaviour.html#c:from_binary_cell/1"><code class="inline">Channel.CellBehaviour.from_binary_cell/1</code></a>.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#c:to_binary_cell/1" translate="no">to_binary_cell(struct)</a>
+        <a href="#from_keywords/1" translate="no">from_keywords(keywords)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Convert a cell of the given type to a binary cell.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Channel.CellBehaviour.html#c:from_keywords/1"><code class="inline">Channel.CellBehaviour.from_keywords/1</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#to_binary_cell/1" translate="no">to_binary_cell(versions_cell)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Channel.CellBehaviour.html#c:to_binary_cell/1"><code class="inline">Channel.CellBehaviour.to_binary_cell/1</code></a>.</p></div>
 
     </div>
 
@@ -173,22 +189,22 @@ Pages
   </section>
 
 
-  <section id="callbacks" class="details-list">
+  <section id="types" class="details-list">
     <h1 class="section-heading">
-      <a class="hover-link" href="#callbacks">
+      <a class="hover-link" href="#types">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
-      <span class="text">Callbacks</span>
+      <span class="text">Types</span>
     </h1>
-    <div class="callbacks-list">
-<section class="detail" id="c:from_binary_cell/1">
+    <div class="types-list">
+<section class="detail" id="t:t/0">
 
   <div class="detail-header">
-    <a href="#c:from_binary_cell/1" class="detail-link" title="Link to this callback">
+    <a href="#t:t/0" class="detail-link" title="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this callback</span>
+      <span class="sr-only">Link to this type</span>
     </a>
-    <h1 class="signature" translate="no">from_binary_cell(t)</h1>
+    <h1 class="signature" translate="no">t()</h1>
 
 
   </div>
@@ -197,57 +213,74 @@ Pages
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> from_binary_cell(<a href="Channel.BinaryCell.html#t:t/0">Channel.BinaryCell.t</a>()) :: {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">struct</a>()} | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()}</pre>
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Channel.Cells.Versions{versions: [<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>()]}</pre>
 
       </div>
 
 
   </section>
 </section>
-<section class="detail" id="c:from_keywords/1">
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="from_binary_cell/1">
 
   <div class="detail-header">
-    <a href="#c:from_keywords/1" class="detail-link" title="Link to this callback">
+    <a href="#from_binary_cell/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this callback</span>
+      <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">from_keywords(keyword)</h1>
+    <h1 class="signature" translate="no">from_binary_cell(cell)</h1>
 
 
   </div>
 
   <section class="docstring">
 
-      <div class="specs">
-
-          <pre translate="no"><span class="attribute">@callback</span> from_keywords(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">keyword</a>()) :: {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">struct</a>()} | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()}</pre>
-
-      </div>
-
-<p>Construct a cell of the given type given a keyword list of options.</p>
+<p>Callback implementation for <a href="Channel.CellBehaviour.html#c:from_binary_cell/1"><code class="inline">Channel.CellBehaviour.from_binary_cell/1</code></a>.</p>
   </section>
 </section>
-<section class="detail" id="c:to_binary_cell/1">
+<section class="detail" id="from_keywords/1">
 
   <div class="detail-header">
-    <a href="#c:to_binary_cell/1" class="detail-link" title="Link to this callback">
+    <a href="#from_keywords/1" class="detail-link" title="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
-      <span class="sr-only">Link to this callback</span>
+      <span class="sr-only">Link to this function</span>
     </a>
-    <h1 class="signature" translate="no">to_binary_cell(struct)</h1>
+    <h1 class="signature" translate="no">from_keywords(keywords)</h1>
 
 
   </div>
 
   <section class="docstring">
 
-      <div class="specs">
+<p>Callback implementation for <a href="Channel.CellBehaviour.html#c:from_keywords/1"><code class="inline">Channel.CellBehaviour.from_keywords/1</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="to_binary_cell/1">
 
-          <pre translate="no"><span class="attribute">@callback</span> to_binary_cell(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">struct</a>()) :: {:ok, <a href="Channel.BinaryCell.html#t:t/0">Channel.BinaryCell.t</a>()} | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()}</pre>
+  <div class="detail-header">
+    <a href="#to_binary_cell/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">to_binary_cell(versions_cell)</h1>
 
-      </div>
 
-<p>Convert a cell of the given type to a binary cell.</p>
+  </div>
+
+  <section class="docstring">
+
+<p>Callback implementation for <a href="Channel.CellBehaviour.html#c:to_binary_cell/1"><code class="inline">Channel.CellBehaviour.to_binary_cell/1</code></a>.</p>
   </section>
 </section>
 
