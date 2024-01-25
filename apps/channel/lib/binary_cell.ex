@@ -1,6 +1,6 @@
 defmodule Channel.BinaryCell do
   @moduledoc """
-  The Channel.BinaryCell module represents the basic unit of communication in the Tor protocol.
+  The Channel.BinaryCell module represents the basic unit of communication over a channel.
 
   Each cell consists of a circuit ID, a command, and a payload. The circuit ID identifies the circuit that the cell belongs to. The command indicates the type of the cell. The payload contains the actual data of the cell.
 
