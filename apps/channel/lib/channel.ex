@@ -34,35 +34,6 @@ defmodule Channel do
     }
   end
 
-  # @doc """
-  # Performs the Tor handshake from the client side, after which communication can begin. Link negotiation protocol 3 used.
-  # """
-  # @spec client_handshake(Channel.t()) :: :ok | {:error, any()}
-  # def client_handshake(%{tls_socket: tls_socket} = channel) do
-  #   with :ok <- send_cell(channel, Channel.BinaryCell.new(0, 7, <<3::16>>)), # VERSIONS
-  #        {:ok, _} <- recv_cell(channel), # VERSIONS
-  #        {:ok, cell} <- recv_cell(channel), # CERTS
-  #        {:ok, certs} <- Channel.Parsing.Certs.parse_certs(cell),
-  #        {5, cert} = Enum.find(certs, fn {cert_type, _} -> cert_type == 5 end),
-  #        :ok <- check_tls_hash(channel, cert),
-  #        {:ok, _} <- recv_cell(channel), # AUTH_CHALLENGE
-  #        {:ok, _} <- recv_cell(channel), # NETINFO
-  #        {:ok, {addr, _port}} <- :ssl.peername(tls_socket) do
-  #     addr_bin = ip_tuple_to_binary(addr)
-  #     addr_type = case tuple_size(addr) do
-  #       4 -> 4
-  #       _ -> 6
-  #     end
-  #     cell = Channel.BinaryCell.new(0, 8, <<0::32, addr_type, byte_size(addr_bin), addr_bin::binary, 1, 4, 4, 0, 0, 0, 0>>)
-  #     send_cell(channel, cell) # NETINFO
-  #   else
-  #     {:error, error} -> {:error, error}
-  #     error -> {:error, error}
-  #   end
-  # end
-
-  # defp ip_tuple_to_binary({a, b, c, d}), do: <<a, b, c, d>>
-
   @doc """
   Validates the TLS certificate of the given channel against the given signing certificate.
 

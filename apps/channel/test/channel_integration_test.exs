@@ -1,6 +1,9 @@
 defmodule ChannelIntegrationTest do
   use ExUnit.Case
-  #doctest Channel.BinaryCell
+
+  alias Channel
+  alias Channel.Cells.Certs
+  alias Channel.Cells.Versions
 
   @ip_ports [{{162, 55, 91, 19}, 443}]
 
@@ -20,7 +23,7 @@ defmodule ChannelIntegrationTest do
   end
 
   # Test if the socket is connected by receiving 0 bytes from it
-  defp is_socket_connected?(socket) do
+  defp socket_connected?(socket) do
     case :ssl.recv(socket, 0, 0) do
       {:ok, _} -> true
       {:error, :closed} -> false
@@ -36,14 +39,14 @@ defmodule ChannelIntegrationTest do
   @tag :integration
   test "performs an unauthenticated client side handshake", %{channel: ch} do
     # Send VERSIONS
-    {:ok, versions_cell} = Channel.Cells.Versions.from_keywords versions: [3]
-    Channel.convert_and_send(ch, versions_cell, Channel.Cells.Versions)
+    {:ok, versions_cell} = Versions.from_keywords versions: [3]
+    Channel.convert_and_send(ch, versions_cell, Versions)
 
     # Receive VERSIONS
-    {:ok, _} = Channel.recv_and_convert(ch, Channel.Cells.Versions)
+    {:ok, _} = Channel.recv_and_convert(ch, Versions)
 
     # Receive CERTS
-    {:ok, _} = Channel.recv_and_convert(ch, Channel.Cells.Certs)
+    {:ok, _} = Channel.recv_and_convert(ch, Certs)
 
     # Receive AUTH_CHALLENGE
     {:ok, _} = Channel.recv_cell(ch)
@@ -52,8 +55,7 @@ defmodule ChannelIntegrationTest do
     cell = Channel.BinaryCell.new(0, 8, <<0::32, 4, 4, 162, 55, 91, 19, 1, 4, 4, 0, 0, 0, 0>>) # NETINFO
     :ok = Channel.send_cell(ch, cell)
 
-
     # Test if the socket is connected
-    assert is_socket_connected?(ch.tls_socket)
+    assert socket_connected?(ch.tls_socket)
   end
 end
