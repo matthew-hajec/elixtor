@@ -5,7 +5,7 @@ defmodule Elixtor.MixProject do
     [
       app: :elixtor,
       apps_path: "apps",
-      version: "0.1.0-beta",
+      version: "0.2.0-beta",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]

@@ -89,6 +89,40 @@ defmodule Channel do
   end
 
   @doc """
+  Converts a cell of a specific type into a binary cell and sends it over the given channel.
+
+  The cell is converted to a binary cell by the given cell module.
+
+  For example, to send a VERSIONS cell:
+
+      cell = Channel.Cells.Versions.new([1, 2, 3])
+      Channel.convert_and_send(channel, cell, Channel.Cells.Versions)
+  """
+  @spec convert_and_send(Channel.t(), struct(), Channel.CellBehaviour) ::
+          :ok | {:error, :ssl.reason()}
+  def convert_and_send(ch, cell, cell_mod) do
+    case cell_mod.to_binary_cell(cell) do
+      {:ok, new_cell} -> send_cell(ch, new_cell)
+      {:error, reason} -> {:error, reason}
+    end
+  end
+
+  @doc """
+  Receives a cell and converts it to a struct using the given cell module.
+
+  For example, to receive a VERSIONS cell:
+
+      {:ok, versions_cell} = Channel.recv_and_convert(channel, Channel.Cells.Versions)
+  """
+  @spec recv_and_convert(Channel.t(), Channel.CellBehaviour) ::
+          {:ok, struct()} | {:error, :ssl.reason()}
+  def recv_and_convert(ch, cell_mod) do
+    with {:ok, cell} <- recv_cell(ch) do
+      cell_mod.from_binary_cell(cell)
+    end
+  end
+
+  @doc """
   Sends the given cell over the given channel.
   """
   @spec send_cell(Channel.t(), Channel.BinaryCell.t()) :: :ok | {:error, :ssl.reason()}

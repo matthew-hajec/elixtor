@@ -5,6 +5,11 @@ defmodule Channel.Cells.Versions do
 
   @behaviour Channel.CellBehaviour
 
+  # The versions that are expected to be sent in a VERSIONS cell
+  @expected_versions [1, 2, 3, 4, 5]
+  # The maximum number of versions that can be sent in a VERSIONS cell
+  @max_n_versions 5
+
   @type t :: %__MODULE__{
           versions: [integer()]
         }
@@ -23,8 +28,12 @@ defmodule Channel.Cells.Versions do
   # A VERSIONS cell contains a list of link protocol versions. Each version is 16 bits long.
   defp parse_versions(binary), do: parse_versions(binary, [])
 
-  defp parse_versions(<<version::16, rest::binary>>, acc),
-    do: parse_versions(rest, [version | acc])
+  # Validate that versions are expected and that there are no more than 5 versions.
+  defp parse_versions(<<version::16, rest::binary>>, acc)
+       when version in @expected_versions and
+              length(acc) < @max_n_versions do
+    parse_versions(rest, [version | acc])
+  end
 
   # Rest is empty, so we're done
   defp parse_versions(<<>>, acc), do: {:ok, Enum.reverse(acc)}
