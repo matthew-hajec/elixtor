@@ -5,16 +5,16 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.31.1">
-    <meta name="project" content="elixtor v0.1.0-beta">
+    <meta name="project" content="elixtor v0.2.0-beta">
 
 
-    <title>Channel — elixtor v0.1.0-beta</title>
+    <title>Channel — elixtor v0.2.0-beta</title>
     <link rel="stylesheet" href="dist/html-elixir-FM2CSD74.css" />
 
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-43PMFBC7.js"></script>
-    <script src="dist/sidebar_items-2FE70329.js"></script>
+    <script src="dist/sidebar_items-2A7F62B1.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -55,7 +55,7 @@
 elixtor
         </a>
         <div class="sidebar-projectVersion" translate="no">
-          v0.1.0-beta
+          v0.2.0-beta
         </div>
       </div>
     </div>
@@ -118,7 +118,7 @@ Pages
 <h1>
 
   <span translate="no">Channel</span> 
-  <small class="app-vsn" translate="no">(elixtor v0.1.0-beta)</small>
+  <small class="app-vsn" translate="no">(elixtor v0.2.0-beta)</small>
 
 </h1>
 
@@ -168,11 +168,31 @@ Pages
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#convert_and_send/3" translate="no">convert_and_send(ch, cell, cell_mod)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Converts a cell of a specific type into a binary cell and sends it over the given channel.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#new/1" translate="no">new(tls_socket)</a>
 
       </div>
 
         <div class="summary-synopsis"><p>Creates a new channel with the given TLS socket.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#recv_and_convert/2" translate="no">recv_and_convert(ch, cell_mod)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Receives a cell and converts it to a struct using the given cell module.</p></div>
 
     </div>
 
@@ -267,6 +287,31 @@ Pages
 <p>Validates the TLS certificate of the given channel against the given signing certificate.</p><p>This function DOES NOT validate the certificate chain, it only checks if the subject matches.</p>
   </section>
 </section>
+<section class="detail" id="convert_and_send/3">
+
+  <div class="detail-header">
+    <a href="#convert_and_send/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">convert_and_send(ch, cell, cell_mod)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> convert_and_send(<a href="#t:t/0">t</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">struct</a>(), Channel.CellBehaviour) ::
+  :ok | {:error, <a href="https://www.erlang.org/doc/man/ssl.html#type-reason">:ssl.reason</a>()}</pre>
+
+      </div>
+
+<p>Converts a cell of a specific type into a binary cell and sends it over the given channel.</p><p>The cell is converted to a binary cell by the given cell module.</p><p>For example, to send a VERSIONS cell:</p><pre><code class="makeup elixir" translate="no"><span class="n">cell</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Channel.Cells.Versions</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="0217747248-1">(</span><span class="p" data-group-id="0217747248-2">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="0217747248-2">]</span><span class="p" data-group-id="0217747248-1">)</span><span class="w">
+</span><span class="nc">Channel</span><span class="o">.</span><span class="n">convert_and_send</span><span class="p" data-group-id="0217747248-3">(</span><span class="n">channel</span><span class="p">,</span><span class="w"> </span><span class="n">cell</span><span class="p">,</span><span class="w"> </span><span class="nc">Channel.Cells.Versions</span><span class="p" data-group-id="0217747248-3">)</span></code></pre>
+  </section>
+</section>
 <section class="detail" id="new/1">
 
   <div class="detail-header">
@@ -288,6 +333,30 @@ Pages
       </div>
 
 <p>Creates a new channel with the given TLS socket.</p>
+  </section>
+</section>
+<section class="detail" id="recv_and_convert/2">
+
+  <div class="detail-header">
+    <a href="#recv_and_convert/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">recv_and_convert(ch, cell_mod)</h1>
+
+
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> recv_and_convert(<a href="#t:t/0">t</a>(), Channel.CellBehaviour) ::
+  {:ok, <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">struct</a>()} | {:error, <a href="https://www.erlang.org/doc/man/ssl.html#type-reason">:ssl.reason</a>()}</pre>
+
+      </div>
+
+<p>Receives a cell and converts it to a struct using the given cell module.</p><p>For example, to receive a VERSIONS cell:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="9952622419-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">versions_cell</span><span class="p" data-group-id="9952622419-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Channel</span><span class="o">.</span><span class="n">recv_and_convert</span><span class="p" data-group-id="9952622419-2">(</span><span class="n">channel</span><span class="p">,</span><span class="w"> </span><span class="nc">Channel.Cells.Versions</span><span class="p" data-group-id="9952622419-2">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="recv_cell/1">
