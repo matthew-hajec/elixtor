@@ -14,7 +14,7 @@
 
     <script src="dist/handlebars.runtime-NWIB6V2M.js"></script>
     <script src="dist/handlebars.templates-43PMFBC7.js"></script>
-    <script src="dist/sidebar_items-2A7F62B1.js"></script>
+    <script src="dist/sidebar_items-FDC3E356.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -124,7 +124,26 @@ Pages
 
 
   <section id="moduledoc">
-<p>The Channel module handles the communication between nodes in a network.</p><p>It provides functions to send and receive cells over a secure SSL socket, and other functions related to establishing and using a channel.</p><p>As of now, link protocols other than version 3 are not explicitly supported.</p><p>You can read more about Channels in the Tor spec: <a href="https://spec.torproject.org/tor-spec/channels.html">https://spec.torproject.org/tor-spec/channels.html</a></p>
+<p>The Channel module handles the communication between nodes in a network.</p><p>It provides functions to send and receive cells over a secure SSL socket, and other functions related to establishing and using a channel.</p><p>As of now, link protocols other than version 3 are not explicitly supported.</p><p>You can read more about Channels in the Tor spec: <a href="https://spec.torproject.org/tor-spec/channels.html">https://spec.torproject.org/tor-spec/channels.html</a></p><h2 id="module-example" class="section-heading">
+  <a href="#module-example" class="hover-link">
+    <i class="ri-link-m" aria-hidden="true"></i>
+  </a>
+  <span class="text">Example</span>
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="c1"># Open a TLS socket with a relay</span><span class="w">
+</span><span class="p" data-group-id="4209561231-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">tls</span><span class="p" data-group-id="4209561231-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">:ssl</span><span class="o">.</span><span class="n">connect</span><span class="p" data-group-id="4209561231-2">(</span><span class="p" data-group-id="4209561231-3">{</span><span class="mi">162</span><span class="p">,</span><span class="w"> </span><span class="mi">55</span><span class="p">,</span><span class="w"> </span><span class="mi">91</span><span class="p">,</span><span class="w"> </span><span class="mi">19</span><span class="p" data-group-id="4209561231-3">}</span><span class="p">,</span><span class="w"> </span><span class="mi">443</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4209561231-4">[</span><span class="ss">:binary</span><span class="p">,</span><span class="w"> </span><span class="ss">active</span><span class="p">:</span><span class="w"> </span><span class="no">false</span><span class="p">,</span><span class="w"> </span><span class="ss">verify</span><span class="p">:</span><span class="w"> </span><span class="ss">:verify_none</span><span class="p" data-group-id="4209561231-4">]</span><span class="p" data-group-id="4209561231-2">)</span><span class="w">
+
+</span><span class="c1"># Create a channel struct</span><span class="w">
+</span><span class="n">ch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Channel</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="4209561231-5">(</span><span class="n">tls</span><span class="p" data-group-id="4209561231-5">)</span><span class="w">
+
+</span><span class="c1"># Create a versions cell</span><span class="w">
+</span><span class="p" data-group-id="4209561231-6">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">versions_cell</span><span class="p" data-group-id="4209561231-6">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Channel.Cells.Versions</span><span class="o">.</span><span class="n">from_keywords</span><span class="w"> </span><span class="ss">versions</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4209561231-7">[</span><span class="mi">3</span><span class="p" data-group-id="4209561231-7">]</span><span class="w">
+
+</span><span class="c1"># Send the versions cell over the channel</span><span class="w">
+</span><span class="nc">Channel</span><span class="o">.</span><span class="n">convert_and_send</span><span class="p" data-group-id="4209561231-8">(</span><span class="n">ch</span><span class="p">,</span><span class="w"> </span><span class="n">versions_cell</span><span class="p">,</span><span class="w"> </span><span class="nc">Channel.Cells.Versions</span><span class="p" data-group-id="4209561231-8">)</span><span class="w">
+
+</span><span class="c1"># Recevie a versions cell from the server</span><span class="w">
+</span><span class="p" data-group-id="4209561231-9">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">versions_cell</span><span class="p" data-group-id="4209561231-9">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Channel</span><span class="o">.</span><span class="n">recv_and_convert</span><span class="p" data-group-id="4209561231-10">(</span><span class="n">ch</span><span class="p">,</span><span class="w"> </span><span class="nc">Channel.Cells.Versions</span><span class="p" data-group-id="4209561231-10">)</span></code></pre>
   </section>
 
 
@@ -308,8 +327,8 @@ Pages
 
       </div>
 
-<p>Converts a cell of a specific type into a binary cell and sends it over the given channel.</p><p>The cell is converted to a binary cell by the given cell module.</p><p>For example, to send a VERSIONS cell:</p><pre><code class="makeup elixir" translate="no"><span class="n">cell</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Channel.Cells.Versions</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="6905805964-1">(</span><span class="p" data-group-id="6905805964-2">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="6905805964-2">]</span><span class="p" data-group-id="6905805964-1">)</span><span class="w">
-</span><span class="nc">Channel</span><span class="o">.</span><span class="n">convert_and_send</span><span class="p" data-group-id="6905805964-3">(</span><span class="n">channel</span><span class="p">,</span><span class="w"> </span><span class="n">cell</span><span class="p">,</span><span class="w"> </span><span class="nc">Channel.Cells.Versions</span><span class="p" data-group-id="6905805964-3">)</span></code></pre>
+<p>Converts a cell of a specific type into a binary cell and sends it over the given channel.</p><p>The cell is converted to a binary cell by the given cell module.</p><p>For example, to send a VERSIONS cell:</p><pre><code class="makeup elixir" translate="no"><span class="n">cell</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Channel.Cells.Versions</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="7648731377-1">(</span><span class="p" data-group-id="7648731377-2">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p" data-group-id="7648731377-2">]</span><span class="p" data-group-id="7648731377-1">)</span><span class="w">
+</span><span class="nc">Channel</span><span class="o">.</span><span class="n">convert_and_send</span><span class="p" data-group-id="7648731377-3">(</span><span class="n">channel</span><span class="p">,</span><span class="w"> </span><span class="n">cell</span><span class="p">,</span><span class="w"> </span><span class="nc">Channel.Cells.Versions</span><span class="p" data-group-id="7648731377-3">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="new/1">
@@ -356,7 +375,7 @@ Pages
 
       </div>
 
-<p>Receives a cell and converts it to a struct using the given cell module.</p><p>For example, to receive a VERSIONS cell:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="7331089291-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">versions_cell</span><span class="p" data-group-id="7331089291-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Channel</span><span class="o">.</span><span class="n">recv_and_convert</span><span class="p" data-group-id="7331089291-2">(</span><span class="n">channel</span><span class="p">,</span><span class="w"> </span><span class="nc">Channel.Cells.Versions</span><span class="p" data-group-id="7331089291-2">)</span></code></pre>
+<p>Receives a cell and converts it to a struct using the given cell module.</p><p>For example, to receive a VERSIONS cell:</p><pre><code class="makeup elixir" translate="no"><span class="p" data-group-id="0730015930-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">versions_cell</span><span class="p" data-group-id="0730015930-1">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Channel</span><span class="o">.</span><span class="n">recv_and_convert</span><span class="p" data-group-id="0730015930-2">(</span><span class="n">channel</span><span class="p">,</span><span class="w"> </span><span class="nc">Channel.Cells.Versions</span><span class="p" data-group-id="0730015930-2">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="recv_cell/1">
