@@ -1,5 +1,7 @@
 # Elixtor
 
+To get started, check out the [ExDoc documentation](https://matthew-hajec.github.io/elixtor/api-reference.html)
+
 ## Example Usage
 
 ```elixir
