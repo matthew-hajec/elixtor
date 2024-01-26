@@ -29,7 +29,7 @@ defmodule Channel.Cells.Certs do
     :pre_sig
   ]
 
-  def from_binary_cell(cell), do: parse_certs(cell.payload)
+  def from_binary_cell(cell) when cell.command == 129, do: parse_certs(cell.payload)
 
   # Read the number of certs in the cell
   defp parse_certs(<<num_certs::8, rest::binary>>), do: parse_certs(num_certs, rest, [])

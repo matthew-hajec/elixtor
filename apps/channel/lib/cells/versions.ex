@@ -18,7 +18,7 @@ defmodule Channel.Cells.Versions do
     :versions
   ]
 
-  def from_binary_cell(cell) do
+  def from_binary_cell(cell) when cell.command == 7 do
     case parse_versions(cell.payload) do
       {:ok, versions} -> {:ok, %__MODULE__{versions: versions}}
       {:error, _} = error -> error
